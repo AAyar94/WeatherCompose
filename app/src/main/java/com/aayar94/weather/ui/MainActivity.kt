@@ -1,4 +1,4 @@
-package com.aayar94.weather
+package com.aayar94.weather.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
