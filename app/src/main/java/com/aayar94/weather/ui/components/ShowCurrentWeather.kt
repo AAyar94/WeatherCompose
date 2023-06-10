@@ -24,9 +24,10 @@ fun ShowCurrentWeather(
     desc: String,
     highestDegree: Int,
     lowestDegree: Int,
+    modifier: Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -43,9 +44,9 @@ fun ShowCurrentWeather(
             fontSize = 36.sp,
             color = Color.White
         )
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Text(text = "H: $highestDegree", fontSize = 24.sp, color = Color.White)
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = modifier.width(12.dp))
             Text(text = "L: $lowestDegree", fontSize = 24.sp, color = Color.White)
         }
     }
@@ -59,6 +60,7 @@ fun ShowCurrentWeatherPreview() {
         format = "°C",
         desc = "Bulutlu",
         highestDegree = 15,
-        lowestDegree = 25
+        lowestDegree = 25,
+        modifier = Modifier
     )
 }

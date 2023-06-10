@@ -20,37 +20,35 @@ import androidx.compose.ui.unit.sp
 import com.aayar94.weather.R
 
 @Composable
-fun TopBar(cityName: String) {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 25.dp, vertical = 15.dp),
-        ) {
-            IconButton(modifier = Modifier.weight(1f),
-                onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = stringResource(R.string.refresh_weather),
-                    tint = Color.White
-                )
-            }
-            Text(
-                text = cityName,
-                modifier = Modifier
-                    .weight(3f)
-                    .padding(top = 8.dp),
-                color = Color.White,
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center
+fun TopBar(cityName: String, modifier: Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 25.dp, vertical = 15.dp),
+    ) {
+        IconButton(modifier = modifier.weight(1f),
+            onClick = { /*TODO*/ }) {
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = stringResource(R.string.refresh_weather),
+                tint = Color.White
             )
-            IconButton(modifier = Modifier.weight(1f), onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Default.LocationOn,
-                    contentDescription = stringResource(R.string.location),
-                    tint = Color.White
-                )
-            }
+        }
+        Text(
+            text = cityName,
+            modifier = modifier
+                .weight(3f)
+                .padding(top = 8.dp),
+            color = Color.White,
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center
+        )
+        IconButton(modifier = modifier.weight(1f), onClick = { /*TODO*/ }) {
+            Icon(
+                imageVector = Icons.Default.LocationOn,
+                contentDescription = stringResource(R.string.location),
+                tint = Color.White
+            )
         }
     }
 }
@@ -58,5 +56,5 @@ fun TopBar(cityName: String) {
 @Preview
 @Composable
 fun TopBarPreview() {
-    TopBar(cityName = "Polatlı")
+    //TopBar(cityName = "Polatlı")
 }
