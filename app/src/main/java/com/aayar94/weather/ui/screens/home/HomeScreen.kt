@@ -39,7 +39,10 @@ fun HomeScreen(
 ) {
     val weatherResponse = homeViewModel.weatherResponse.observeAsState()
     val geolocationResponse = homeViewModel.geoLocationResponse.observeAsState()
-
+    val formattedUnitFormat = when (homeViewModel.unit) {
+        "metric" -> "°C"
+        else -> "°F"
+    }
     LaunchedEffect(key1 = Unit, block = {
         homeViewModel.getGeoLocation(39.578835, 32.143528)
         homeViewModel.getWeatherData(39.578835, 32.143528)
@@ -64,7 +67,7 @@ fun HomeScreen(
                     })
 
                 ShowCurrentWeather(degree = weatherResponse.value!!.current.temp,
-                    format = homeViewModel.unit,
+                    format = formattedUnitFormat,
                     desc = weatherResponse.value!!.current.weather[0].description,
                     highestDegree = weatherResponse.value!!.daily[0].temp.min,
                     lowestDegree = weatherResponse.value!!.daily[0].temp.max,
@@ -100,6 +103,7 @@ fun HomeScreen(
                 ) {}
                 Box(modifier = Modifier
                     .blur(radius = 20.dp)
+                    .background(Color.Transparent)
                     .constrainAs(blurLayer) {
                         top.linkTo(bottomCard.top)
                         start.linkTo(bottomCard.start)
@@ -128,5 +132,5 @@ fun HomeScreen(
 @Preview(showSystemUi = true, device = Devices.PIXEL_4_XL)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(navController = rememberNavController())
+    HomeScreen(navController = rememberNavController(),)
 }
