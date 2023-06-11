@@ -8,9 +8,9 @@ interface WeatherDataAPI {
 
     @GET("/data/3.0/onecall?exclude=minutely,alerts")
     suspend fun getWeather(
-        @Query("lat") lat: String,
-        @Query("lon") lon: String,
-        @Query("appid") appid: String,
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") apiKey: String,
         @Query("units") units: String,
         @Query("lang") lang: String
     ): WeatherDataModel

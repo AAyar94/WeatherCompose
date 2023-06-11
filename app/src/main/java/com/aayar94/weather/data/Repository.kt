@@ -17,19 +17,19 @@ class Repository @Inject constructor(
     }
 
     suspend fun getWeather(
-        lat: String,
-        lon: String,
+        lat: Double,
+        lon: Double,
         appid: String,
         units: String,
     ): WeatherDataModel {
         return remoteDataSource.getWeather(lat, lon, appid, units, langCode)
     }
 
-    suspend fun getCityName(lat: String, lon: String, appid: String): GeoLocationDataModel {
+    suspend fun getCityName(lat: Double, lon: Double, appid: String): GeoLocationDataModel {
         return remoteDataSource.getCityName(lat, lon, appid)
     }
 
-    suspend fun getAirPollution(lat: String, lon: String, appid: String): AirPollutionDataModel {
+    suspend fun getAirPollution(lat: Double, lon: Double, appid: String): AirPollutionDataModel {
         return remoteDataSource.getAirQuality(lat, lon, appid)
     }
 

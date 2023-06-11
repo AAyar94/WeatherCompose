@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.aayar94.weather.ui.screens.DetailsScreen
-import com.aayar94.weather.ui.screens.HomeScreen
+import com.aayar94.weather.ui.screens.home.HomeScreen
 
 @Composable
 fun WeatherNavigation() {

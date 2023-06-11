@@ -8,9 +8,9 @@ interface  AirPollutionAPI {
 
     @GET("/data/2.5/air_pollution?")
     suspend fun getAirPollution(
-        @Query("lat") lat: String,
-        @Query("lon") lon: String,
-        @Query("appid") appid: String
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") apiKey: String
     ) : AirPollutionDataModel
 
 }

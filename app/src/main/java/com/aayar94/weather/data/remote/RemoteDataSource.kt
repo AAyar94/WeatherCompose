@@ -11,8 +11,8 @@ class RemoteDataSource @Inject constructor(
     private val airPollutionAPI: AirPollutionAPI,
 ) {
     suspend fun getWeather(
-        lat: String,
-        lon: String,
+        lat: Double,
+        lon: Double,
         appid: String,
         units: String,
         lang: String,
@@ -20,11 +20,11 @@ class RemoteDataSource @Inject constructor(
         return weatherDataAPI.getWeather(lat, lon, appid, units, lang)
     }
 
-    suspend fun getCityName(lat: String, lon: String, appid: String): GeoLocationDataModel {
+    suspend fun getCityName(lat: Double, lon: Double, appid: String): GeoLocationDataModel {
         return geoLocationNameDataAPI.getCityName(lat, lon, appid)
     }
 
-    suspend fun getAirQuality(lat: String, lon: String, appid: String): AirPollutionDataModel {
+    suspend fun getAirQuality(lat: Double, lon: Double, appid: String): AirPollutionDataModel {
         return airPollutionAPI.getAirPollution(lat, lon, appid)
     }
 

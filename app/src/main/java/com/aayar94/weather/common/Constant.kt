@@ -1,12 +1,17 @@
 package com.aayar94.weather.common
 
-import android.annotation.SuppressLint
+import com.aayar94.weather.BuildConfig
 import java.util.Locale
 
 class Constant {
-    companion object{
-        val BASE_URL = "https://api.openweathermap.org"
+    companion object {
 
-        val SYSTEM_LANG_CODE = Locale.getDefault().toLanguageTag()
+
+        const val BASE_URL = "https://api.openweathermap.org"
+
+        var SYSTEM_LANG_CODE = Locale.getDefault().toLanguageTag()
+
+        const val API_KEY = BuildConfig.WEATHER_API_KEY
     }
+
 }

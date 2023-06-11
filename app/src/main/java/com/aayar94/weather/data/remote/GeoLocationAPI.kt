@@ -8,8 +8,8 @@ interface GeoLocationAPI {
 
     @GET("/geo/1.0/reverse?limit=1")
     suspend fun getCityName(
-        @Query("lat") lat: String,
-        @Query("lon") lon: String,
-        @Query("appid") appid: String
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") apiKey: String
     ): GeoLocationDataModel
 }

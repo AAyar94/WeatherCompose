@@ -1,9 +1,13 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
+
+val key: String = gradleLocalProperties(rootDir).getProperty("WEATHER_API_KEY")
 
 android {
     namespace = "com.aayar94.weather"
@@ -23,6 +27,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "WEATHER_API_KEY", key)
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -40,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -67,25 +75,29 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.4.3")
+
     /*      Navigation      */
     implementation("androidx.navigation:navigation-compose:2.6.0")
 
     /*      Hilt        */
     implementation("com.google.dagger:hilt-android:2.44.2")
     kapt("com.google.dagger:hilt-android-compiler:2.44.2")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
 
     /*      Retrofit        */
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     /*      Gson        */
-    implementation ("com.google.code.gson:gson:2.10")
+    implementation("com.google.code.gson:gson:2.10")
 
     /*      okHttpClient Logging Interceptor        */
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
     /*      Constraint Layout Compose       */
-    implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
 
 }

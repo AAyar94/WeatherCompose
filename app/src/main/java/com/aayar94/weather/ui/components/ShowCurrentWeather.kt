@@ -22,8 +22,8 @@ fun ShowCurrentWeather(
     degree: Double,
     format: String,
     desc: String,
-    highestDegree: Int,
-    lowestDegree: Int,
+    highestDegree: Double,
+    lowestDegree: Double,
     modifier: Modifier,
 ) {
     Column(
@@ -59,8 +59,8 @@ fun ShowCurrentWeatherPreview() {
         degree = 21.2,
         format = "°C",
         desc = "Bulutlu",
-        highestDegree = 15,
-        lowestDegree = 25,
+        highestDegree = 15.0,
+        lowestDegree = 25.2,
         modifier = Modifier
     )
 }
