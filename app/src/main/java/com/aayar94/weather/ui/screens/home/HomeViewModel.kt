@@ -1,6 +1,5 @@
 package com.aayar94.weather.ui.screens.home
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aayar94.weather.common.Constant.Companion.API_KEY
@@ -17,8 +16,8 @@ class HomeViewModel @Inject constructor(
     private val repository: Repository,
 ) : ViewModel() {
 
-    val weatherResponse: MutableLiveData<WeatherDataModel> = MutableLiveData()
-    val geoLocationResponse: MutableLiveData<GeoLocationDataModel> = MutableLiveData()
+    val weatherResponse = MutableStateFlow<WeatherDataModel?>(null)
+    val geoLocationResponse = MutableStateFlow<GeoLocationDataModel?>(null)
 
     private val unitFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val unit = when (unitFlow.value) {
@@ -28,15 +27,13 @@ class HomeViewModel @Inject constructor(
 
     fun getWeatherData(lat: Double, lon: Double) {
         viewModelScope.launch {
-            weatherResponse.postValue(repository.getWeather(lat, lon, API_KEY, unit))
+            weatherResponse.value = repository.getWeather(lat, lon, API_KEY, unit)
         }
-
     }
 
     fun getGeoLocation(lat: Double, lon: Double) {
         viewModelScope.launch {
-            geoLocationResponse.postValue(repository.getCityName(lat, lon, API_KEY))
+            geoLocationResponse.value = repository.getCityName(lat, lon, API_KEY)
         }
     }
-
 }

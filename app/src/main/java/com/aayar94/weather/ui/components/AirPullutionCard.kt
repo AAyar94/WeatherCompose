@@ -46,19 +46,10 @@ fun AirPullutionCard(
 }
 
 
-@Preview(uiMode = UI_MODE_NIGHT_NO)
-@Composable
-fun DayAirPullutionCardPreview() {
-    WeatherTheme {
-        AirPullutionCard(
-            4, "Moderate"
-        )
-    }
-}
-
+@Preview
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun NightAirPullutionCardPreview() {
+fun AirPullutionCardPreview() {
     WeatherTheme {
         AirPullutionCard(
             4, "Moderate"

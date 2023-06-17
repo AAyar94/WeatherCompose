@@ -1,9 +1,9 @@
 package com.aayar94.weather.ui.components
 
-import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -18,30 +18,24 @@ import com.aayar94.weather.ui.theme.WeatherTheme
 fun MaterialDetailCard(
     modifier: Modifier = Modifier,
     shape: RoundedCornerShape = RoundedCornerShape(size = 24.dp),
-    color: Color = MaterialTheme.colorScheme.secondaryContainer,
+    color: Color = MaterialTheme.colorScheme.primaryContainer,
     content: @Composable () -> Unit,
 ) {
     Surface(
         modifier = modifier
-            .fillMaxWidth().height(150.dp),
+            .width(200.dp)
+            .height(200.dp)
+            .padding(12.dp),
         shape = shape,
         color = color,
         content = content
     )
 }
 
-@Preview(uiMode = UI_MODE_NIGHT_NO)
-@Composable
-fun DayMaterialDetailCardPreview() {
-    WeatherTheme {
-        MaterialDetailCard {
-        }
-    }
-}
-
+@Preview
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun NightMaterialDetailCardPreview() {
+fun MaterialDetailCardPreview() {
     WeatherTheme {
         MaterialDetailCard {
         }

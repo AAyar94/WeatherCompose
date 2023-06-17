@@ -1,6 +1,6 @@
 package com.aayar94.weather.ui.components
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,12 +19,12 @@ import com.aayar94.weather.R
 import com.aayar94.weather.ui.theme.WeatherTheme
 
 @Composable
-fun UvIndexCard(
-    level: Double, desc: String,
-    modifier: Modifier = Modifier,
+fun FellsLikeCard(
+    degree: Int,
+    actualDegree: Int,
 ) {
-    val localLevel = level.toInt()
     MaterialDetailCard {
+
         Column(
             modifier = Modifier
                 .height(200.dp)
@@ -33,36 +33,36 @@ fun UvIndexCard(
         ) {
             Row {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_ultraviolet),
+                    painter = painterResource(id = R.drawable.ic_fells_like),
                     contentDescription = "Ultraviolet Icon"
                 )
                 Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "UV-Index")
+                Text(text = "Fells Like")
             }
-            Text(text = localLevel.toString(), fontSize = 48.sp)
+            Text(text = degree.toString(), fontSize = 48.sp)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = desc, fontSize = 14.sp)
+            Text(text = differenceBetweenDegree(degree, actualDegree), fontSize = 14.sp)
         }
+
     }
 }
+
+fun differenceBetweenDegree(degree: Int, actualDegree: Int): String {
+    val difference = degree - actualDegree
+    return when (difference) {
+        in 0..1 -> "Similar to actual degree"
+        in 1..2 -> "Almost to actual degree"
+        in 2..3 -> "A little bit different"
+        else -> ""
+    }
+}
+
 
 @Preview
-@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun UvIndexPreview() {
+fun FellsLikePreview() {
     WeatherTheme {
-        UvIndexCard(4.0, "Moderate")
-    }
-}
-
-fun uviToDescString(uvi: Double): String {
-    val localUvi = uvi.toInt()
-    return when (localUvi) {
-        in 0..2 -> "Low"
-        in 3..5 -> "Moderate"
-        in 6..7 -> "High"
-        in 8..10 -> "Very High"
-        else -> "Extreme"
-
+        FellsLikeCard(19, 18)
     }
 }
