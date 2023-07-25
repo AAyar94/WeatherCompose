@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -17,13 +18,26 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object WeatherDataModule {
 
+    @Provides
+    @Singleton
+    @Named("Weather")
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
     @Singleton
     @Provides
     @Named("Weather")
-    fun provideHTTPClient(): OkHttpClient {
+    fun provideHTTPClient(
+        @Named("Weather")
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(15, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
             .build()
     }
 

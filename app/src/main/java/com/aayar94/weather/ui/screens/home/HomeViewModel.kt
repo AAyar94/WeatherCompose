@@ -27,13 +27,19 @@ class HomeViewModel @Inject constructor(
 
     fun getWeatherData(lat: Double, lon: Double) {
         viewModelScope.launch {
-            weatherResponse.value = repository.getWeather(lat, lon, Constant.API_KEY, unit)
+            val result = repository.getWeather(lat, lon, Constant.API_KEY, unit)
+            result?.let {
+                weatherResponse.value = it
+            }
         }
     }
 
     fun getGeoLocation(lat: Double, lon: Double) {
         viewModelScope.launch {
-            geoLocationResponse.value = repository.getCityName(lat, lon, Constant.API_KEY)
+            val result = repository.getCityName(lat, lon, Constant.API_KEY)
+            result?.let {
+                geoLocationResponse.value = it
+            }
         }
     }
 }

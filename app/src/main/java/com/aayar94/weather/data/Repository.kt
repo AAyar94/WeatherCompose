@@ -21,11 +21,11 @@ class Repository @Inject constructor(
         lon: Double,
         appid: String,
         units: String,
-    ): WeatherDataModel {
+    ): WeatherDataModel? {
         return remoteDataSource.getWeather(lat, lon, appid, units, langCode)
     }
 
-    suspend fun getCityName(lat: Double, lon: Double, appid: String): GeoLocationDataModel {
+    suspend fun getCityName(lat: Double, lon: Double, appid: String): GeoLocationDataModel? {
         return remoteDataSource.getCityName(lat, lon, appid)
     }
 

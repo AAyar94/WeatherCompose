@@ -1,31 +1,40 @@
 package com.aayar94.weather.ui.screens.home
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -38,8 +47,8 @@ fun HomeScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val weatherResponse = homeViewModel.weatherResponse.collectAsState()
-    val geolocationResponse = homeViewModel.geoLocationResponse.collectAsState()
+    val weatherResponse by homeViewModel.weatherResponse.collectAsState()
+    val geolocationResponse by homeViewModel.geoLocationResponse.collectAsState()
     val formattedUnitFormat = when (homeViewModel.unit) {
         "metric" -> "°C"
         else -> "°F"
@@ -49,81 +58,121 @@ fun HomeScreen(
         homeViewModel.getWeatherData(39.578835, 32.143528)
     })
 
-    weatherResponse.let { weatherData ->
-        geolocationResponse.let { geoLocationData ->
-
+    weatherResponse?.let { weatherData ->
+        geolocationResponse?.let { geoLocationData ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .paint(
                         painterResource(id = R.drawable.home_background),
-                        contentScale = ContentScale.FillBounds
+                        contentScale = ContentScale.Crop
                     )
             ) {
-                ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-                    val (topBar, currentWeather, houseImage, bottomCard, blurLayer) = createRefs()
+                Image(
+                    painter = painterResource(id = R.drawable.house_4_3),
+                    contentDescription = "House",
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .aspectRatio(3f / 4f)
+                        .align(Alignment.BottomCenter)
+                )
+
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                ) {
                     TopBar(
-                        cityName = geoLocationData.value!![0].name,
-                        modifier = Modifier.constrainAs(topBar) {
-                            top.linkTo(parent.top, margin = 12.dp)
-                            start.linkTo(parent.start, margin = 16.dp)
-                            end.linkTo(parent.end, margin = 16.dp)
-                        })
+                        cityName = geoLocationData[0].name,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 12.dp)
+                    )
 
-                    ShowCurrentWeather(degree = weatherData.value?.current?.temp!!,
+                    ShowCurrentWeather(
+                        degree = weatherData.current.temp,
                         format = formattedUnitFormat,
-                        desc = weatherData.value!!.current.weather[0].description,
-                        highestDegree = weatherData.value!!.daily[0].temp.min,
-                        lowestDegree = weatherData.value!!.daily[0].temp.max,
-                        modifier = Modifier.constrainAs(currentWeather) {
-                            top.linkTo(topBar.bottom, margin = 8.dp)
-                            start.linkTo(parent.start, margin = 16.dp)
-                            end.linkTo(parent.end, margin = 16.dp)
-                        })
+                        desc = weatherData.current.weather[0].description,
+                        highestDegree = weatherData.daily[0].temp.min,
+                        lowestDegree = weatherData.daily[0].temp.max,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 8.dp)
+                    )
 
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .paint(
-                            painterResource(id = R.drawable.house_4_3),
-                            contentScale = ContentScale.FillBounds
-                        )
-                        .constrainAs(houseImage) {
-                            top.linkTo(currentWeather.bottom, margin = 8.dp)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom)
-                            width = Dimension.fillToConstraints
-                        })
-                    Card(
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color.Blue)
-                            .constrainAs(bottomCard) {
-                                bottom.linkTo(parent.bottom)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                                width = Dimension.fillToConstraints
-                            }, shape = RoundedCornerShape(size = 20.dp)
-                    ) {}
-                    Box(modifier = Modifier
-                        .blur(radius = 20.dp)
-                        .background(Color.Transparent)
-                        .constrainAs(blurLayer) {
-                            top.linkTo(bottomCard.top)
-                            start.linkTo(bottomCard.start)
-                            end.linkTo(bottomCard.end)
-                            bottom.linkTo(parent.bottom)
-                            width = Dimension.fillToConstraints
-                        }) {
+                            .aspectRatio(4 / 3f)
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color(0xFF46277C).copy(alpha = 0.75f),
+                                        Color.Black,
+                                        Color.Black
+                                    )
+                                ),
+                                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                            )
+                    ) {
                         Column {
-                            Row(modifier = Modifier.fillMaxWidth()) {
-                                TabRow(selectedTabIndex = 0) {
-                                    Tab(selected = true, onClick = { /*TODO*/ }) {
+                            var selectedTabIndex by remember {
+                                mutableStateOf(0)
+                            }
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                            ) {
+                                TabRow(
+                                    modifier = Modifier.padding(top = 10.dp),
+                                    selectedTabIndex = selectedTabIndex,
+                                    containerColor = Color.Transparent,
+                                    contentColor = Color.White,
+                                    indicator = { tabPositions ->
+                                        TabRowDefaults.Indicator(
+                                            modifier = Modifier.tabIndicatorOffset(
+                                                tabPositions[selectedTabIndex]
+                                            ),
+                                            color = Color.White
+                                        )
+                                    }
+                                ) {
+                                    Tab(
+                                        modifier = Modifier.padding(vertical = 10.dp),
+                                        selected = selectedTabIndex == 0,
+                                        onClick = {
+                                            selectedTabIndex = 0
+                                        }
+                                    ) {
                                         Text(text = "Hourly")
                                     }
-                                    Tab(selected = false, onClick = { /*TODO*/ }) {
+                                    Tab(
+                                        modifier = Modifier.padding(vertical = 10.dp),
+                                        selected = selectedTabIndex == 1,
+                                        onClick = {
+                                            selectedTabIndex = 1
+                                        }
+                                    ) {
                                         Text(text = "Daily")
                                     }
+                                }
+                            }
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.Transparent),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (selectedTabIndex == 0) {
+                                    Text(
+                                        text = "Hourly",
+                                        color = Color.White
+                                    )
+                                } else {
+                                    Text(
+                                        text = "Daily",
+                                        color = Color.White
+                                    )
                                 }
                             }
                         }

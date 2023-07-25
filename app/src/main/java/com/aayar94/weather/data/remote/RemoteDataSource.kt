@@ -16,12 +16,32 @@ class RemoteDataSource @Inject constructor(
         appid: String,
         units: String,
         lang: String,
-    ): WeatherDataModel {
-        return weatherDataAPI.getWeather(lat, lon, appid, units, lang)
+    ): WeatherDataModel? {
+        return try {
+            val result = weatherDataAPI.getWeather(lat, lon,appid, units, lang)
+            if (result.isSuccessful) {
+                result.body()
+            } else {
+                null
+            }
+        }catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
-    suspend fun getCityName(lat: Double, lon: Double, appid: String): GeoLocationDataModel {
-        return geoLocationNameDataAPI.getCityName(lat, lon, appid)
+    suspend fun getCityName(lat: Double, lon: Double, appid: String): GeoLocationDataModel? {
+        return try {
+            val result = geoLocationNameDataAPI.getCityName(lat, lon, appid)
+            if (result.isSuccessful) {
+                result.body()
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     suspend fun getAirQuality(lat: Double, lon: Double, appid: String): AirPollutionDataModel {
