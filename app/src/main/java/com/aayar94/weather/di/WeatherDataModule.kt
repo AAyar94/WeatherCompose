@@ -1,6 +1,6 @@
 package com.aayar94.weather.di
 
-import com.aayar94.weather.common.Constant.Companion.BASE_URL
+import com.aayar94.weather.common.Constant
 import com.aayar94.weather.data.remote.WeatherDataAPI
 import dagger.Module
 import dagger.Provides
@@ -42,7 +42,7 @@ object WeatherDataModule {
         @Named("Weather") gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Constant.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()

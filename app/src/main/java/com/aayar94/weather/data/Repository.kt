@@ -1,6 +1,6 @@
 package com.aayar94.weather.data
 
-import com.aayar94.weather.common.Constant.Companion.SYSTEM_LANG_CODE
+import com.aayar94.weather.common.Constant
 import com.aayar94.weather.data.model.air_pollution.AirPollutionDataModel
 import com.aayar94.weather.data.model.geo_location.GeoLocationDataModel
 import com.aayar94.weather.data.model.weather.WeatherDataModel
@@ -10,7 +10,7 @@ import javax.inject.Inject
 class Repository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
 ) {
-    private val systemLangCode = SYSTEM_LANG_CODE
+    private val systemLangCode = Constant.SYSTEM_LANG_CODE
     private val langCode = when (systemLangCode) {
         "tr-TR" -> "tr"
         else -> "en"

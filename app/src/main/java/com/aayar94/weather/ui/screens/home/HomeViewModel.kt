@@ -2,7 +2,7 @@ package com.aayar94.weather.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aayar94.weather.common.Constant.Companion.API_KEY
+import com.aayar94.weather.common.Constant
 import com.aayar94.weather.data.Repository
 import com.aayar94.weather.data.model.geo_location.GeoLocationDataModel
 import com.aayar94.weather.data.model.weather.WeatherDataModel
@@ -27,13 +27,13 @@ class HomeViewModel @Inject constructor(
 
     fun getWeatherData(lat: Double, lon: Double) {
         viewModelScope.launch {
-            weatherResponse.value = repository.getWeather(lat, lon, API_KEY, unit)
+            weatherResponse.value = repository.getWeather(lat, lon, Constant.API_KEY, unit)
         }
     }
 
     fun getGeoLocation(lat: Double, lon: Double) {
         viewModelScope.launch {
-            geoLocationResponse.value = repository.getCityName(lat, lon, API_KEY)
+            geoLocationResponse.value = repository.getCityName(lat, lon, Constant.API_KEY)
         }
     }
 }
