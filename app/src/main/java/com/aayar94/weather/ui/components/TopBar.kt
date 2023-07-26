@@ -56,5 +56,5 @@ fun TopBar(cityName: String, modifier: Modifier) {
 @Preview
 @Composable
 fun TopBarPreview() {
-    //TopBar(cityName = "Polatlı")
+    TopBar(cityName = "Polatlı", Modifier)
 }

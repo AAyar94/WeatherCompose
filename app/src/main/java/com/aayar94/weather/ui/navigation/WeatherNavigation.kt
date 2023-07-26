@@ -13,7 +13,7 @@ fun WeatherNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = WeatherScreens.DetailScreen.name,
+        startDestination = WeatherScreens.HomeScreen.name,
         builder = {
             composable(WeatherScreens.HomeScreen.name) {
                 HomeScreen(navController = navController)

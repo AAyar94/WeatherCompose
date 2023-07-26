@@ -28,7 +28,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "WEATHER_API_KEY", key)
+            buildConfigField("String", "WEATHER_API_KEY", "\"$key\"")
         }
         release {
             isMinifyEnabled = false
