@@ -1,5 +1,6 @@
 package com.aayar94.weather.ui.screens.home
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -41,12 +41,16 @@ import androidx.navigation.compose.rememberNavController
 import com.aayar94.weather.R
 import com.aayar94.weather.ui.components.ShowCurrentWeather
 import com.aayar94.weather.ui.components.TopBar
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+@SuppressLint("RememberReturnType")
 @Composable
 fun HomeScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
+    val systemUIController = rememberSystemUiController()
+    systemUIController.setStatusBarColor(Color.Black,false)
     val weatherResponse by homeViewModel.weatherResponse.collectAsState()
     val geolocationResponse by homeViewModel.geoLocationResponse.collectAsState()
     val formattedUnitFormat = when (homeViewModel.unit) {

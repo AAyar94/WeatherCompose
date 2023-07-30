@@ -27,7 +27,6 @@ import com.aayar94.weather.ui.theme.WeatherTheme
 @Composable
 fun DetailsScreen(navController: NavController) {
     DetailScreenContent()
-
 }
 
 @Composable

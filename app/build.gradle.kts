@@ -11,7 +11,7 @@ val key: String = gradleLocalProperties(rootDir).getProperty("WEATHER_API_KEY")
 
 android {
     namespace = "com.aayar94.weather"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.aayar94.weather"
@@ -71,12 +71,15 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    testImplementation("junit:junit:4.13.2")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    //testImplementation("junit:junit:4.13.2")
+    //debugImplementation("androidx.compose.ui:ui-tooling")
+    //debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation ("androidx.compose.runtime:runtime-livedata:1.4.3")
+
+    /*      SystemUI Controller     */
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.31.6-rc")
 
     /*      Gson        */
     implementation ("com.google.code.gson:gson:2.10")
