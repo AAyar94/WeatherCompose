@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -22,10 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
@@ -41,6 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import com.aayar94.weather.R
 import com.aayar94.weather.ui.components.ShowCurrentWeather
 import com.aayar94.weather.ui.components.TopBar
+import com.aayar94.weather.ui.navigation.WeatherScreens
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @SuppressLint("RememberReturnType")
@@ -50,7 +54,7 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val systemUIController = rememberSystemUiController()
-    systemUIController.setStatusBarColor(Color.Black,false)
+    systemUIController.setStatusBarColor(Color.Black, false)
     val weatherResponse by homeViewModel.weatherResponse.collectAsState()
     val geolocationResponse by homeViewModel.geoLocationResponse.collectAsState()
     val formattedUnitFormat = when (homeViewModel.unit) {
@@ -103,7 +107,6 @@ fun HomeScreen(
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -120,8 +123,20 @@ fun HomeScreen(
                             )
                     ) {
                         Column {
+                            Button(onClick = {
+                                navController.navigate(WeatherScreens.DetailScreen.name)
+                            }, modifier = Modifier
+                                .fillMaxWidth()
+                                .align(CenterHorizontally)
+                                .background(Color.Transparent)
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_arrow_up),
+                                    contentDescription = "Details Button"
+                                )
+                            }
                             var selectedTabIndex by remember {
-                                mutableStateOf(0)
+                                mutableIntStateOf(0)
                             }
                             Row(
                                 modifier = Modifier
