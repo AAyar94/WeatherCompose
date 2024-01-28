@@ -21,7 +21,7 @@ import com.aayar94.weather.ui.components.HumitidyCard
 import com.aayar94.weather.ui.components.UvIndexCard
 import com.aayar94.weather.ui.components.WindCard
 import com.aayar94.weather.ui.components.uviToDescString
-import com.aayar94.weather.ui.mock.MockWeatherDataModel
+import com.aayar94.weather.ui.mock.MockWeatherDto
 import com.aayar94.weather.ui.theme.WeatherTheme
 
 @Composable
@@ -32,7 +32,7 @@ fun DetailsScreen(navController: NavController) {
 @Composable
 fun DetailScreenContent(
 ) {
-    val weatherData = MockWeatherDataModel
+    val weatherData = MockWeatherDto
     Box(
         modifier = Modifier
             .fillMaxSize()

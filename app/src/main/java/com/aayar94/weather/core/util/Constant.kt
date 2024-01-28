@@ -1,4 +1,4 @@
-package com.aayar94.weather.common
+package com.aayar94.weather.core.util
 
 import com.aayar94.weather.BuildConfig
 import java.util.Locale

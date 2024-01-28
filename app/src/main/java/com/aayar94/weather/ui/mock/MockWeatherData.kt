@@ -7,9 +7,9 @@ import com.aayar94.weather.data.model.weather.Hourly
 import com.aayar94.weather.data.model.weather.Rain
 import com.aayar94.weather.data.model.weather.Temp
 import com.aayar94.weather.data.model.weather.Weather
-import com.aayar94.weather.data.model.weather.WeatherDataModel
+import com.aayar94.weather.data.model.weather.WeatherDto
 
-val MockWeatherDataModel = WeatherDataModel(
+val MockWeatherDto = WeatherDto(
     lat = 39.5788,
     lon = 32.1435,
     timezone = "Europe/Istanbul",

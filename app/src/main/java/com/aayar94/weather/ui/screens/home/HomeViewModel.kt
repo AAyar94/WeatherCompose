@@ -2,22 +2,23 @@ package com.aayar94.weather.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aayar94.weather.common.Constant
-import com.aayar94.weather.data.Repository
-import com.aayar94.weather.data.model.geo_location.GeoLocationDataModel
-import com.aayar94.weather.data.model.weather.WeatherDataModel
+import com.aayar94.weather.domain.location.LocationTracker
+import com.aayar94.weather.domain.usecase.GetHomeScreenContentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: Repository,
+    private val getHomeScreenContentUseCase: GetHomeScreenContentUseCase,
+    private val locationTracker: LocationTracker
 ) : ViewModel() {
 
-    val weatherResponse = MutableStateFlow<WeatherDataModel?>(null)
-    val geoLocationResponse = MutableStateFlow<GeoLocationDataModel?>(null)
+    private val _uiState = MutableStateFlow(HomeUIState())
+    val uiState = _uiState.asStateFlow()
 
     private val unitFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val unit = when (unitFlow.value) {
@@ -25,20 +26,24 @@ class HomeViewModel @Inject constructor(
         else -> "metric"
     }
 
-    fun getWeatherData(lat: Double, lon: Double) {
+    fun getLocationThenWeather() {
         viewModelScope.launch {
-            val result = repository.getWeather(lat, lon, Constant.API_KEY, unit)
-            result?.let {
-                weatherResponse.value = it
+            locationTracker.getCurrentLocation()?.let { location ->
+                getWeatherData(location.latitude, location.longitude)
             }
         }
     }
 
-    fun getGeoLocation(lat: Double, lon: Double) {
+
+    private fun getWeatherData(lat: Double, lon: Double) {
         viewModelScope.launch {
-            val result = repository.getCityName(lat, lon, Constant.API_KEY)
-            result?.let {
-                geoLocationResponse.value = it
+            val response = getHomeScreenContentUseCase.invoke(lat, lon, unit)
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = null,
+                    homeScreenDataModel = response
+                )
             }
         }
     }

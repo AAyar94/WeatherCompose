@@ -1,6 +1,5 @@
 package com.aayar94.weather.ui.screens.home
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -47,157 +48,157 @@ import com.aayar94.weather.ui.components.TopBar
 import com.aayar94.weather.ui.navigation.WeatherScreens
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-@SuppressLint("RememberReturnType")
 @Composable
 fun HomeScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
+    LaunchedEffect(key1 = Unit) {
+        homeViewModel.getLocationThenWeather()
+    }
     val systemUIController = rememberSystemUiController()
     systemUIController.setStatusBarColor(Color.Black, false)
-    val weatherResponse by homeViewModel.weatherResponse.collectAsState()
-    val geolocationResponse by homeViewModel.geoLocationResponse.collectAsState()
     val formattedUnitFormat = when (homeViewModel.unit) {
         "metric" -> "°C"
         else -> "°F"
     }
-    LaunchedEffect(key1 = Unit, block = {
-        homeViewModel.getGeoLocation(39.578835, 32.143528)
-        homeViewModel.getWeatherData(39.578835, 32.143528)
-    })
-
-    weatherResponse?.let { weatherData ->
-        geolocationResponse?.let { geoLocationData ->
-            Box(
+    val uiState = homeViewModel.uiState.collectAsState()
+    if (uiState.value.homeScreenDataModel != null) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .paint(
+                    painterResource(id = R.drawable.home_background),
+                    contentScale = ContentScale.Crop
+                )
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.house_4_3),
+                contentDescription = "House",
                 modifier = Modifier
-                    .fillMaxSize()
-                    .paint(
-                        painterResource(id = R.drawable.home_background),
-                        contentScale = ContentScale.Crop
-                    )
+                    .fillMaxWidth(1f)
+                    .aspectRatio(3f / 4f)
+                    .align(Alignment.BottomCenter)
+            )
+
+            Column(
+                modifier = Modifier.fillMaxSize()
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.house_4_3),
-                    contentDescription = "House",
+                TopBar(
+                    cityName = uiState.value.homeScreenDataModel!!.geoLocationDto?.get(0)?.name
+                        ?: "",
                     modifier = Modifier
-                        .fillMaxWidth(1f)
-                        .aspectRatio(3f / 4f)
-                        .align(Alignment.BottomCenter)
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 12.dp)
                 )
 
-                Column(
-                    modifier = Modifier.fillMaxSize()
+                ShowCurrentWeather(
+                    degree = uiState.value.homeScreenDataModel!!.weatherDto?.current!!.temp,
+                    format = formattedUnitFormat,
+                    desc = uiState.value.homeScreenDataModel!!.weatherDto!!.current.weather[0].description,
+                    highestDegree = uiState.value.homeScreenDataModel!!.weatherDto!!.daily[0].temp.min,
+                    lowestDegree = uiState.value.homeScreenDataModel!!.weatherDto!!.daily[0].temp.max,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 8.dp)
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(4 / 3f)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color(0xFF46277C).copy(alpha = 0.75f),
+                                    Color.Black,
+                                    Color.Black
+                                )
+                            ),
+                            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                        )
                 ) {
-                    TopBar(
-                        cityName = geoLocationData[0].name,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 12.dp)
-                    )
-
-                    ShowCurrentWeather(
-                        degree = weatherData.current.temp,
-                        format = formattedUnitFormat,
-                        desc = weatherData.current.weather[0].description,
-                        highestDegree = weatherData.daily[0].temp.min,
-                        lowestDegree = weatherData.daily[0].temp.max,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 8.dp)
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(4 / 3f)
-                            .background(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color(0xFF46277C).copy(alpha = 0.75f),
-                                        Color.Black,
-                                        Color.Black
-                                    )
-                                ),
-                                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-                            )
-                    ) {
-                        Column {
-                            Button(onClick = {
+                    Column {
+                        Button(
+                            onClick = {
                                 navController.navigate(WeatherScreens.DetailScreen.name)
                             }, modifier = Modifier
                                 .fillMaxWidth()
                                 .align(CenterHorizontally)
                                 .background(Color.Transparent)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_arrow_up),
+                                contentDescription = "Details Button"
+                            )
+                        }
+                        var selectedTabIndex by remember {
+                            mutableIntStateOf(0)
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                        ) {
+                            TabRow(
+                                modifier = Modifier.padding(top = 10.dp),
+                                selectedTabIndex = selectedTabIndex,
+                                containerColor = Color.Transparent,
+                                contentColor = Color.White,
+                                indicator = { tabPositions ->
+                                    TabRowDefaults.Indicator(
+                                        modifier = Modifier.tabIndicatorOffset(
+                                            tabPositions[selectedTabIndex]
+                                        ),
+                                        color = Color.White
+                                    )
+                                }
                             ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_arrow_up),
-                                    contentDescription = "Details Button"
-                                )
-                            }
-                            var selectedTabIndex by remember {
-                                mutableIntStateOf(0)
-                            }
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                            ) {
-                                TabRow(
-                                    modifier = Modifier.padding(top = 10.dp),
-                                    selectedTabIndex = selectedTabIndex,
-                                    containerColor = Color.Transparent,
-                                    contentColor = Color.White,
-                                    indicator = { tabPositions ->
-                                        TabRowDefaults.Indicator(
-                                            modifier = Modifier.tabIndicatorOffset(
-                                                tabPositions[selectedTabIndex]
-                                            ),
-                                            color = Color.White
-                                        )
+                                Tab(
+                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    selected = selectedTabIndex == 0,
+                                    onClick = {
+                                        selectedTabIndex = 0
                                     }
                                 ) {
-                                    Tab(
-                                        modifier = Modifier.padding(vertical = 10.dp),
-                                        selected = selectedTabIndex == 0,
-                                        onClick = {
-                                            selectedTabIndex = 0
-                                        }
-                                    ) {
-                                        Text(text = "Hourly")
+                                    Text(text = "Hourly")
+                                }
+                                Tab(
+                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    selected = selectedTabIndex == 1,
+                                    onClick = {
+                                        selectedTabIndex = 1
                                     }
-                                    Tab(
-                                        modifier = Modifier.padding(vertical = 10.dp),
-                                        selected = selectedTabIndex == 1,
-                                        onClick = {
-                                            selectedTabIndex = 1
-                                        }
-                                    ) {
-                                        Text(text = "Daily")
-                                    }
+                                ) {
+                                    Text(text = "Daily")
                                 }
                             }
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(Color.Transparent),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                if (selectedTabIndex == 0) {
-                                    Text(
-                                        text = "Hourly",
-                                        color = Color.White
-                                    )
-                                } else {
-                                    Text(
-                                        text = "Daily",
-                                        color = Color.White
-                                    )
-                                }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Transparent),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (selectedTabIndex == 0) {
+                                Text(
+                                    text = "Hourly",
+                                    color = Color.White
+                                )
+                            } else {
+                                Text(
+                                    text = "Daily",
+                                    color = Color.White
+                                )
                             }
                         }
                     }
                 }
             }
+        }
+    } else {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Center) {
+            CircularProgressIndicator()
         }
     }
 }

@@ -1,12 +1,13 @@
-package com.aayar94.weather.di
+package com.aayar94.weather.core.di
 
-import com.aayar94.weather.common.Constant
-import com.aayar94.weather.data.remote.AirPollutionAPI
+import com.aayar94.weather.core.util.Constant
+import com.aayar94.weather.data.remote.WeatherDataAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -15,31 +16,44 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AirQualityDataModule {
+object WeatherDataModule {
+
+    @Provides
+    @Singleton
+    @Named("Weather")
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
 
     @Singleton
     @Provides
-    @Named("AirQuality")
-    fun provideHTTPClient(): OkHttpClient {
+    @Named("Weather")
+    fun provideHTTPClient(
+        @Named("Weather")
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(15, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
             .build()
     }
 
     @Singleton
     @Provides
-    @Named("AirQuality")
+    @Named("Weather")
     fun provideConverterFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
     }
 
     @Singleton
     @Provides
-    @Named("AirQuality")
+    @Named("Weather")
     fun provideRetrofit(
-        @Named("AirQuality") okHttpClient: OkHttpClient,
-        @Named("AirQuality") gsonConverterFactory: GsonConverterFactory
+        @Named("Weather") okHttpClient: OkHttpClient,
+        @Named("Weather") gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Constant.BASE_URL)
@@ -50,7 +64,7 @@ object AirQualityDataModule {
 
     @Singleton
     @Provides
-    fun providesGeoLocationAPI(@Named("AirQuality") retrofit: Retrofit): AirPollutionAPI {
-        return retrofit.create(AirPollutionAPI::class.java)
+    fun providesWeatherAPI(@Named("Weather") retrofit: Retrofit): WeatherDataAPI {
+        return retrofit.create(WeatherDataAPI::class.java)
     }
 }

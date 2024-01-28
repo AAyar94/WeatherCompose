@@ -1,8 +1,8 @@
 package com.aayar94.weather.data.remote
 
-import com.aayar94.weather.data.model.air_pollution.AirPollutionDataModel
-import com.aayar94.weather.data.model.geo_location.GeoLocationDataModel
-import com.aayar94.weather.data.model.weather.WeatherDataModel
+import com.aayar94.weather.data.model.air_pollution.AirPollutionDto
+import com.aayar94.weather.data.model.geo_location.GeoLocationDto
+import com.aayar94.weather.data.model.weather.WeatherDto
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(
@@ -16,7 +16,7 @@ class RemoteDataSource @Inject constructor(
         appid: String,
         units: String,
         lang: String,
-    ): WeatherDataModel? {
+    ): WeatherDto? {
         return try {
             val result = weatherDataAPI.getWeather(lat, lon,appid, units, lang)
             if (result.isSuccessful) {
@@ -30,7 +30,7 @@ class RemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getCityName(lat: Double, lon: Double, appid: String): GeoLocationDataModel? {
+    suspend fun getCityName(lat: Double, lon: Double, appid: String): GeoLocationDto? {
         return try {
             val result = geoLocationNameDataAPI.getCityName(lat, lon, appid)
             if (result.isSuccessful) {
@@ -44,7 +44,7 @@ class RemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getAirQuality(lat: Double, lon: Double, appid: String): AirPollutionDataModel {
+    suspend fun getAirQuality(lat: Double, lon: Double, appid: String): AirPollutionDto {
         return airPollutionAPI.getAirPollution(lat, lon, appid)
     }
 

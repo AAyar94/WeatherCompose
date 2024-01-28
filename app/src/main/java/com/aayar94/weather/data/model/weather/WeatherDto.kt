@@ -1,6 +1,6 @@
 package com.aayar94.weather.data.model.weather
 
-data class WeatherDataModel(
+data class WeatherDto(
     val current: Current,
     val daily: List<Daily>,
     val hourly: List<Hourly>,

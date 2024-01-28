@@ -1,6 +1,6 @@
 package com.aayar94.weather.data.remote
 
-import com.aayar94.weather.data.model.air_pollution.AirPollutionDataModel
+import com.aayar94.weather.data.model.air_pollution.AirPollutionDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -11,6 +11,6 @@ interface  AirPollutionAPI {
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
         @Query("appid") apiKey: String
-    ) : AirPollutionDataModel
+    ) : AirPollutionDto
 
 }
