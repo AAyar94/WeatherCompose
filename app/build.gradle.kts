@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.aayar94.weather"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -89,6 +89,7 @@ dependencies {
 
     /*      Hilt        */
     implementation("com.google.dagger:hilt-android:2.44.2")
+    implementation("com.google.android.gms:play-services-location:21.1.0")
     kapt("com.google.dagger:hilt-android-compiler:2.44.2")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
 
