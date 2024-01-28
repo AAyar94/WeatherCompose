@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.aayar94.weather.R
 import com.aayar94.weather.data.model.weather.Hourly
 import com.aayar94.weather.ui.mock.hourlyList
-import com.aayar94.weather.ui.theme.WeatherTheme
+import com.aayar94.weather.core.theme.WeatherTheme
 
 @Composable
 fun HourlyForecast(

@@ -45,7 +45,7 @@ import androidx.navigation.compose.rememberNavController
 import com.aayar94.weather.R
 import com.aayar94.weather.ui.components.ShowCurrentWeather
 import com.aayar94.weather.ui.components.TopBar
-import com.aayar94.weather.ui.navigation.WeatherScreens
+import com.aayar94.weather.core.navigation.WeatherScreens
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable

@@ -1,4 +1,4 @@
-package com.aayar94.weather.ui.theme
+package com.aayar94.weather.core.theme
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF5045DE)

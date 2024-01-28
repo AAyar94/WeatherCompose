@@ -1,4 +1,4 @@
-package com.aayar94.weather.ui.navigation
+package com.aayar94.weather.core.navigation
 
 enum class WeatherScreens {
     Onboarding,

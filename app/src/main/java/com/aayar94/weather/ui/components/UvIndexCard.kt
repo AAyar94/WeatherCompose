@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aayar94.weather.R
-import com.aayar94.weather.ui.theme.WeatherTheme
+import com.aayar94.weather.core.theme.WeatherTheme
 
 @Composable
 fun UvIndexCard(

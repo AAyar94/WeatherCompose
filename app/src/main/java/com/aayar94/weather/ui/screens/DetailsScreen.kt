@@ -22,7 +22,7 @@ import com.aayar94.weather.ui.components.UvIndexCard
 import com.aayar94.weather.ui.components.WindCard
 import com.aayar94.weather.ui.components.uviToDescString
 import com.aayar94.weather.ui.mock.MockWeatherDto
-import com.aayar94.weather.ui.theme.WeatherTheme
+import com.aayar94.weather.core.theme.WeatherTheme
 
 @Composable
 fun DetailsScreen(navController: NavController) {

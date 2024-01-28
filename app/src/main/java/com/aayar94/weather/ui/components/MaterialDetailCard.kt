@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.aayar94.weather.ui.theme.WeatherTheme
+import com.aayar94.weather.core.theme.WeatherTheme
 
 @Composable
 fun MaterialDetailCard(
