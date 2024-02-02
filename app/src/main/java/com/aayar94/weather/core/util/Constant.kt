@@ -1,10 +1,5 @@
 package com.aayar94.weather.core.util
 
-import com.aayar94.weather.BuildConfig
-import java.util.Locale
-
 object Constant {
-    const val BASE_URL = "https://api.openweathermap.org"
-    val API_KEY = BuildConfig.WEATHER_API_KEY
-    var SYSTEM_LANG_CODE = Locale.getDefault().toLanguageTag()
+    const val BASE_URL = "tps://api.open-meteo.com/v1/forecast?"
 }

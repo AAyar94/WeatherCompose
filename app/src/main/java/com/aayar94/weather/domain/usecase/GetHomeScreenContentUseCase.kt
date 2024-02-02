@@ -1,23 +1,22 @@
 package com.aayar94.weather.domain.usecase
 
-import com.aayar94.weather.data.Repository
-import com.aayar94.weather.domain.model.HomeScreenDataModel
-import java.time.LocalDateTime
-import javax.inject.Inject
+import com.aayar94.weather.domain.model.HomeScreenContent
+import com.aayar94.weather.domain.repository.WeatherRepository
+import kotlin.math.roundToInt
 
-class GetHomeScreenContentUseCase @Inject constructor(
-    private val repository: Repository
-) {
+class GetHomeScreenContentUseCase(val repository: WeatherRepository) {
 
-    suspend operator fun invoke(lat: Double, lon: Double, unit: String): HomeScreenDataModel {
-        val weatherResponse = repository.getWeather(lat = lat, lon = lon, units = unit)
-        val geoLocationResponse = repository.getCityName(lat = lat, lon = lon)
-
-        return HomeScreenDataModel(
-            refreshTime = LocalDateTime.now(),
-            weatherDto = weatherResponse,
-            geoLocationDto = geoLocationResponse
+    suspend operator fun invoke(lat: Double, lon: Double): HomeScreenContent {
+        val response = repository.getWeather(lat, lon)
+        return HomeScreenContent(
+            cityName = response.current.temperature_2m.toString(),
+            degree=response.current.temperature_2m,
+            date = response.current.time.toString(),
+            uvIndex = response.current.wind_speed_10m.roundToInt(),
+            windSpeed = response.current.wind_speed_10m,
+            humidity = response.current.relative_humidity_2m,
+            list = response.daily
         )
     }
-}
 
+}

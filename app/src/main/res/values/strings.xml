@@ -1,15 +1,7 @@
 <resources>
     <string name="app_name">Weather</string>
-    <string name="refresh_weather">Refresh Weather</string>
-    <string name="location">Location</string>
-    <string name="wind">Wind</string>
-    <string name="north_char">N</string>
-    <string name="south_char">S</string>
-    <string name="east_char">E</string>
-    <string name="west_char">W</string>
-    <string name="wind_direction">Wind Direction</string>
-    <string name="humitidycard">HumitidyCard</string>
-    <string name="humitidy">Humitidy</string>
-    <string name="the_dew_point_is_x">The dew point is</string>
-    <string name="daily_forecast">Daily Forecast</string>
+    <string name="fells_like">Fells Like</string>
+    <string name="humidity">Humidity</string>
+    <string name="ultraviyolet">Uv \n Index</string>
+    <string name="wind_speed">Wind \n Speed</string>
 </resources>
