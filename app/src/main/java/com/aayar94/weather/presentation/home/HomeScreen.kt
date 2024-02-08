@@ -1,6 +1,7 @@
 package com.aayar94.weather.presentation.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -40,180 +42,193 @@ import com.aayar94.weather.R
 import com.aayar94.weather.core.theme.LocalSpacing
 import com.aayar94.weather.core.util.CityColorSchemes
 import com.aayar94.weather.core.util.DevicesPreview
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+    val uiController = rememberSystemUiController()
+    uiController.setSystemBarsColor(Color.Transparent)
     val spacing = LocalSpacing.current
     val colorScheme = CityColorSchemes.list.random()
     val state = rememberLazyListState()
     val uiState = viewModel.uiState.collectAsState()
+    viewModel.getWeather()
     Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = painterResource(id = colorScheme.rawBgImage),
-            contentDescription = null
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = spacing.spaceLarge)
-                .zIndex(2f),
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.weight(2f))
+        if (uiState.value.isLoading) {
+            CircularProgressIndicator()
+        } else {
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                painter = painterResource(id = colorScheme.rawBgImage),
+                contentDescription = null
+            )
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = spacing.spaceLarge)
+                    .zIndex(2f),
+                verticalArrangement = Arrangement.SpaceAround,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = uiState.value.data?.cityName ?: "",
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    fontSize = 48.sp
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                Spacer(modifier = Modifier.weight(2f))
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = uiState.value.data?.degree.toString(),
-                        fontSize = 36.sp,
+                        text = uiState.value.data?.cityName ?: "",
                         color = Color.White,
-                        textAlign = TextAlign.Center, modifier = Modifier.alignBy(LastBaseline)
+                        textAlign = TextAlign.Center,
+                        fontSize = 48.sp
                     )
-                    Text(
-                        text = "C",
-                        fontSize = 18.sp,
-                        color = Color.White,
-                        textAlign = TextAlign.Center, modifier = Modifier.alignBy(LastBaseline)
-                    )
-                }
-                Text(
-                    text = uiState.value.data?.date ?: "", fontSize = 24.sp, color = Color.White,
-                    textAlign = TextAlign.Center,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = spacing.spaceLarge),
-                    shape = RoundedCornerShape(20.dp),
-                    color = Color.White
-                ) {
-                    Card(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(spacing.spaceMedium),
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = colorScheme.primaryColor),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                            .wrapContentHeight()
+                            .clickable {
+                                viewModel.getWeather()
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
+                        Text(
+                            text = uiState.value.data?.degree.toString(),
+                            fontSize = 36.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center, modifier = Modifier.alignBy(LastBaseline)
+                        )
+                        Text(
+                            text = "C",
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center, modifier = Modifier.alignBy(LastBaseline)
+                        )
+                    }
+                    Text(
+                        text = uiState.value.data?.date ?: "",
+                        fontSize = 24.sp,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = spacing.spaceLarge),
+                        shape = RoundedCornerShape(20.dp),
+                        color = Color.White
+                    ) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(spacing.spaceMedium),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = colorScheme.primaryColor),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                         ) {
-                            Column(
-                                modifier = Modifier.padding(spacing.spaceSmall),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Row() {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_ultraviolet),
-                                        contentDescription = null, tint = Color.White
-                                    )
-                                    Spacer(modifier = Modifier.width(spacing.spaceSmall))
-                                    Text(
-                                        text = stringResource(R.string.ultraviyolet),
-                                        color = Color.White,
-                                        fontSize = 14.sp
-                                    )
+                                Column(
+                                    modifier = Modifier.padding(spacing.spaceSmall),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Row() {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_ultraviolet),
+                                            contentDescription = null, tint = Color.White
+                                        )
+                                        Spacer(modifier = Modifier.width(spacing.spaceSmall))
+                                        Text(
+                                            text = stringResource(R.string.ultraviyolet),
+                                            color = Color.White,
+                                            fontSize = 14.sp
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(spacing.spaceMedium))
+                                    Text(text = "degree", fontSize = 16.sp, color = Color.White)
                                 }
-                                Spacer(modifier = Modifier.height(spacing.spaceMedium))
-                                Text(text = "degree", fontSize = 16.sp, color = Color.White)
-                            }
-                            Divider(
-                                color = Color.Gray,
-                                modifier = Modifier
-                                    .height(200.dp)
-                                    .width(2.dp)
-                            )
-                            Column(
-                                modifier = Modifier.padding(spacing.spaceSmall),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Row() {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_wind),
-                                        contentDescription = null, tint = Color.White
-                                    )
-                                    Spacer(modifier = Modifier.width(spacing.spaceSmall))
-                                    Text(
-                                        text = stringResource(R.string.wind_speed),
-                                        color = Color.White,
-                                        maxLines = 2,
-                                        fontSize = 14.sp
-                                    )
+                                Divider(
+                                    color = Color.Gray,
+                                    modifier = Modifier
+                                        .height(200.dp)
+                                        .width(2.dp)
+                                )
+                                Column(
+                                    modifier = Modifier.padding(spacing.spaceSmall),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Row() {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_wind),
+                                            contentDescription = null, tint = Color.White
+                                        )
+                                        Spacer(modifier = Modifier.width(spacing.spaceSmall))
+                                        Text(
+                                            text = stringResource(R.string.wind_speed),
+                                            color = Color.White,
+                                            maxLines = 2,
+                                            fontSize = 14.sp
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(spacing.spaceMedium))
+                                    Text(text = "degree", fontSize = 16.sp, color = Color.White)
                                 }
-                                Spacer(modifier = Modifier.height(spacing.spaceMedium))
-                                Text(text = "degree", fontSize = 16.sp, color = Color.White)
-                            }
-                            Divider(
-                                color = Color.Gray,
-                                modifier = Modifier
-                                    .height(200.dp)
-                                    .width(2.dp)
-                            )
-                            Column(
-                                modifier = Modifier.padding(spacing.spaceSmall),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Row() {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_humidity),
-                                        contentDescription = null, tint = Color.White
-                                    )
-                                    Spacer(modifier = Modifier.width(spacing.spaceSmall))
-                                    Text(
-                                        text = stringResource(R.string.humidity),
-                                        color = Color.White,
-                                        fontSize = 14.sp, maxLines = 1
-                                    )
+                                Divider(
+                                    color = Color.Gray,
+                                    modifier = Modifier
+                                        .height(200.dp)
+                                        .width(2.dp)
+                                )
+                                Column(
+                                    modifier = Modifier.padding(spacing.spaceSmall),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Row() {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_humidity),
+                                            contentDescription = null, tint = Color.White
+                                        )
+                                        Spacer(modifier = Modifier.width(spacing.spaceSmall))
+                                        Text(
+                                            text = stringResource(R.string.humidity),
+                                            color = Color.White,
+                                            fontSize = 14.sp, maxLines = 1
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(spacing.spaceMedium))
+                                    Text(text = "degree", fontSize = 16.sp, color = Color.White)
                                 }
-                                Spacer(modifier = Modifier.height(spacing.spaceMedium))
-                                Text(text = "degree", fontSize = 16.sp, color = Color.White)
                             }
                         }
-                    }
 
-                }
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = spacing.spaceLarge),
-                    shape = RoundedCornerShape(20.dp),
-                    color = Color.White
-                ) {
-                    Card(
+                    }
+                    Surface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(spacing.spaceMedium),
+                            .padding(horizontal = spacing.spaceLarge),
                         shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = colorScheme.primaryColor),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        color = Color.White
                     ) {
-                        LazyRow(modifier = Modifier, state = state) {
-                            //items(uiState.value.data)
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(spacing.spaceMedium),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = colorScheme.primaryColor),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        ) {
+                            LazyRow(modifier = Modifier, state = state) {
+                                //items(uiState.value.data)
+                            }
                         }
                     }
                 }
