@@ -7,7 +7,7 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
-val key: String = gradleLocalProperties(rootDir).getProperty("WEATHER_API_KEY")
+val API_KEY: String = gradleLocalProperties(rootDir).getProperty("WEATHER_API_KEY")
 
 
 android {
@@ -29,7 +29,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "WEATHER_API_KEY", "\"$key\"")
+            buildConfigField("String", "WEATHER_API_KEY", API_KEY)
         }
         release {
             isMinifyEnabled = false
@@ -37,7 +37,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "WEATHER_API_KEY", "\"$key\"")
+            buildConfigField("String", "WEATHER_API_KEY", API_KEY)
         }
     }
     compileOptions {
@@ -82,10 +82,22 @@ dependencies {
     /*      NAVIGATION      */
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
+    // Lifecycle
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+
+    /*      SystemUI Controller     */
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
+
     /*      HILT        */
     implementation("com.google.dagger:hilt-android:2.50")
-    ksp("com.google.dagger:hilt-compiler:2.50")
+    ksp("com.google.dagger:hilt-android-compiler:2.50")
+    implementation("androidx.hilt:hilt-work:1.1.0")
     ksp("androidx.hilt:hilt-compiler:1.1.0")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+
 
     /*      ROOM        */
     implementation("androidx.room:room-runtime:2.6.1")
@@ -103,5 +115,5 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
-    implementation( "androidx.compose.material:material-icons-extended:1.6.0")
+    implementation( "androidx.compose.material:material-icons-extended:1.6.1")
 }
