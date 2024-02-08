@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.aayar94.weather.R
@@ -43,7 +44,7 @@ import com.aayar94.weather.core.util.DevicesPreview
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val spacing = LocalSpacing.current
     val colorScheme = CityColorSchemes.list.random()
@@ -82,7 +83,7 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = uiState.value.data?.degree,
+                        text = uiState.value.data?.degree.toString(),
                         fontSize = 36.sp,
                         color = Color.White,
                         textAlign = TextAlign.Center, modifier = Modifier.alignBy(LastBaseline)
@@ -225,5 +226,5 @@ fun HomeScreen(
 @DevicesPreview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(navController = rememberNavController(), viewModel =)
+    HomeScreen(navController = rememberNavController())
 }
